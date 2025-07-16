@@ -1,12 +1,31 @@
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 // import { StatusBar } from 'expo-status-bar'
 import Header from '../header'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Category from '../category'
+import Offers from '../offers';
+import Card from '../card';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { db } from '../../firebase';                       // ✅ ensure correct path
 
+const Home = ({navigation}) => {
 
-const Home = () => {
+    const [foodData, setFoodData] = useState([])
+
+    const foodDataQry = collection(db, 'FoodData')          // ✅ modular SDK
+
+    useEffect(() =>
+    {
+        // ✅ onSnapshot (typo fixed) + add id for FlatList key
+        const unsub = onSnapshot(foodDataQry, snapshot =>{
+            setFoodData(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })))
+        })
+        return () => unsub()                                // cleanup
+    }, [])
+
+    // console.log('present food data',foodData)
+
     return (
         <View style={styles.maincontainer}>
             <StatusBar backgroundColor='red' />
@@ -19,21 +38,15 @@ const Home = () => {
             </TouchableOpacity>
 
             <Category />
-            {/* <View>
-                <Text>Categories</Text>
-            </View>
-            <View>
-                <Text>All Categories</Text>
-            </View> */}
+           
+            <Offers />
 
-            <View>
-                <Text>Slider (Offers fo r user, advertisements)</Text>
-            </View>
+            {/* ✅ pass data & navigation */}
+            <Card data={foodData} navigation={navigation}/>
 
-            <View>
-                <Text>Foods</Text>
-            </View>
-
+            {/* <TouchableOpacity onPress={() => navigation.navigate('product')}>
+                <Text>Go to Product</Text>
+           </TouchableOpacity> */}
 
         </View>
     )
@@ -45,9 +58,6 @@ const styles = StyleSheet.create({
     maincontainer: {
         flex: 1,
         height: '100%',
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        // backgroundColor: 'red',
     },
     searchbox: {
         flexDirection: 'row',
@@ -58,9 +68,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         elevation: 2,
-        // height: 40, 
-        // borderWidth:2,
-        // borderColor:'red',
         borderRadius: 25
     },
     input: {
@@ -69,10 +76,5 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         marginLeft: 10,
         width: '90%',
-        // backgroundColor: 'red',
-        // borderWidth:2,
-        // borderColor:'red',
-        // height: 40,
-
     },
 })

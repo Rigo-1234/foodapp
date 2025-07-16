@@ -1,23 +1,78 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
-import { NavigationContainer } from '@react-navigation/native'
-import Home from '../home/home'
+import { StyleSheet } from 'react-native';
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-const Stack = createStackNavigator()
+import Home from '../home/home';
+import Product from '../home/product';
+import Trackorder from '../home/trackorder';
+import Usercart from '../home/usercart';
+import Profile from '../home/profile';
+import Setting from '../home/setting';
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const Homestack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="product" component={Product} />
+    </Stack.Navigator>
+  );
+};
 
 const Appstack = () => {
- return (
+  return (
     <NavigationContainer>
-        <Stack.Navigator>
-            <Stack.Screen name="home" component={Home} options={{headerShown: false}}/>
-            {/* <Stack.Screen name="Notifications" component={NotificationsScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
-            <Stack.Screen name="Settings" component={SettingsScreen} />  */}
-        </Stack.Navigator>
-  </NavigationContainer>
- )}
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarStyle: styles.tabBar,
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
-export default Appstack
+            if (route.name === 'Home') {
+              iconName = 'home';
+            } else if (route.name === 'Profile') {
+              iconName = 'user';
+            } else if (route.name === 'Settings') {
+              iconName = 'cog';
+            } else if (route.name === 'UserCart') {
+              iconName = 'shopping-cart';
+            } else if (route.name === 'TrackOrder') {
+              iconName = 'map';
+            }
 
-const styles = StyleSheet.create({})
+            return <FontAwesome name={iconName} size={size} color={color} />;
+          },
+          tabBarLabelStyle: styles.tabBarLabelStyle,
+          headerShown: false,
+        })}
+      >
+        <Tab.Screen name="Home" component={Homestack} />
+        <Tab.Screen name="UserCart" component={Usercart} />
+        <Tab.Screen name="Profile" component={Profile} />
+        <Tab.Screen name="TrackOrder" component={Trackorder} />
+        <Tab.Screen name="Settings" component={Setting} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default Appstack;
+
+const styles = StyleSheet.create({
+  tabBar: {
+    height: 60,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: 'green',
+  },
+  tabBarLabelStyle: {
+    paddingBottom: 5,
+    fontSize: 12,
+    marginBottom: 5,
+  },
+});
