@@ -20,13 +20,13 @@ import { getStorage } from 'firebase/storage';
 // 1️⃣  CONFIG
 // ──────────────────────────────────────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey:             'YOUR_API_KEY',
-  authDomain:         'YOUR_PROJECT_ID.firebaseapp.com',
-  projectId:          'YOUR_PROJECT_ID',
-  storageBucket:      'YOUR_PROJECT_ID.appspot.com',
-  messagingSenderId:  'YOUR_SENDER_ID',
-  appId:              'YOUR_APP_ID',
-  measurementId:      'YOUR_MEASUREMENT_ID', // optional
+  apiKey: "AIzaSyBEAYrUIIKMopAKbGG0RJLP_hLTqApSni8",
+  authDomain: "food-319c3.firebaseapp.com",
+  projectId: "food-319c3",
+  storageBucket: "food-319c3.firebasestorage.app",
+  messagingSenderId: "758063583800",
+  appId: "1:758063583800:web:b2891f84f3032150628ccd",
+  measurementId: "G-B6XMK4L3TN"
 };
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -40,9 +40,10 @@ const app = initializeApp(firebaseConfig);
 //    • Auth
 //    • Storage (optional; remove if unused)
 // ──────────────────────────────────────────────────────────────────────────────
-initializeFirestore(app, {
-  localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
-});
+// for web purpose
+// initializeFirestore(app, {
+//   localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+// });
 const db     = getFirestore(app);
 const auth   = getAuth(app);
 const bucket = getStorage(app);
